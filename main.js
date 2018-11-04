@@ -1,3 +1,5 @@
+//UNLICENSE 2018 : cgoxopx<cgoxopx@qq.com>
+//main.js
 (function(){
 
 function autoReg(url , tm){
@@ -6,13 +8,13 @@ function autoReg(url , tm){
         "arg"        : [] , 
         "times"     : 999999999 ,
         "ifr"        : null ,
-        "running"   : false;
+        "running"   : false
     };
     
     var counter=0;
     
     self.reload=function(){
-        self.ifr.location.reload();
+        self.ifr.contentWindow.location.reload();
     }
     
     self.submiting=function(){
@@ -33,7 +35,10 @@ function autoReg(url , tm){
         self.running=true;
         self.ifr=document.createElement('iframe');
         self.ifr.onload=self.submiting;
-        self.ifr.src=url;
+        
+        self.ifr.src=self.url;
+        
+        document.body.appendChild(document.createElement('br'));
         document.body.appendChild(self.ifr);
     }
     
@@ -48,7 +53,7 @@ function autoReg(url , tm){
                 if(inputs[i].type=='text' || inputs[i].type=='number' || inputs[i].type=='password')
                     return true;
             }
-        }catche(e){
+        }catch(e){
             return false;
         }
         return false;
@@ -75,7 +80,7 @@ function autoReg(url , tm){
                     }
                 }
             }
-        }catche(e){
+        }catch(e){
             
         }
     }
@@ -89,7 +94,7 @@ function autoReg(url , tm){
                     return true;
                 }
             }
-        }catche(e){
+        }catch(e){
             
         }
         return false;
@@ -102,7 +107,7 @@ function autoReg(url , tm){
                 inputs[0].click();
                 return true;
             }
-        }catche(e){
+        }catch(e){
         
         }
         return false;
@@ -115,7 +120,7 @@ function autoReg(url , tm){
                 inputs[0].submit();
                 return true;
             }
-        }catche(e){
+        }catch(e){
         }
         return false;
     }
@@ -137,11 +142,14 @@ function autoReg(url , tm){
 function makeUI(){
     var div=null;
     var inputs=[];
+    var urlbox=null;
     
     function makeBegining(){
-        var button=document.createElement('button');
+        var button=document.createElement('input');
+        button.type='submit';
         button.onclick=makeConfig;
-        button.innerHtml='xlautoreg';
+        button.value='xlautoreg';
+        document.body.appendChild(document.createElement('br'));
         document.body.appendChild(button);
     }
     
@@ -151,23 +159,23 @@ function makeUI(){
         div=document.createElement('div');
         document.body.appendChild(div);
         
-        var button1=document.createElement('button');
+        urlbox=document.createElement('input');
+        urlbox.placeholder='url';
+        urlbox.type='text';
+        document.body.appendChild(document.createElement('hr'));
+        document.body.appendChild(urlbox);
+        document.body.appendChild(document.createElement('br'));
+        
+        var button1=document.createElement('input');
+        button1.type='submit';
         button1.onclick=startProcess;
-        button1.innerHtml='start';
+        button1.value='start';
         document.body.appendChild(button1);
         
-        //the function have been canceled
-        //you can reload the page to stop
-        //in addition,you can create multiple processes to register by click start
-        
-        //var button2=document.createElement('button');
-        //button2.onclick=stopProcess;
-        //button2.innerHtml='stop';
-        //document.body.appendChild(button2);
-        
-        var button3=document.createElement('button');
+        var button3=document.createElement('input');
+        button3.type='submit';
         button3.onclick=addArgs;
-        button3.innerHtml='add';
+        button3.value='add';
         document.body.appendChild(button3);
     }
     
@@ -175,18 +183,25 @@ function makeUI(){
         var input=document.createElement('input');
         input.type='text';
         div.appendChild(input);
+        div.appendChild(document.createElement('br'));
         inputs.push(input);
     }
     
     function startProcess(){
-        var core=autoReg(window.location.href , 1000);
+        var attacking=urlbox.value;
+        var showing=document.createElement('div');
+        showing.innerText="attacking:"+attacking;
+        document.body.appendChild(showing);
+        var core=autoReg(attacking , 1000);
         for(var i in inputs){
             core.arg.push(inputs[i].value);
         }
         core.start();
     }
+    
+    makeBegining();//create a botton in the end of the page
 }
 
-makeUI();
+setTimeout(makeUI,2000);
 
 })();
